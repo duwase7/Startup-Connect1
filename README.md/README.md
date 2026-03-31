@@ -1,142 +1,158 @@
 # Startup Connect
+Is a web application for discovering and researching startups globally. 
 
-**Discover, filter, and explore startups from across the globe — powered by live API data.**
+The app allows users to search, filter, and compare startup companies by industry, funding stage, and region. It pulls live news from an external API and converts funding figures into local African currencies to make the data more relevant to the target audience.
 
-Startup Connect is a fully responsive web application that aggregates startup information, live tech news, and funding data to help founders, investors, job-seekers, and enthusiasts navigate the global startup ecosystem.
+## Problem It Solves
 
----
+Finding reliable, filterable startup data in one place is difficult — especially for people in Africa who want to track what is happening locally and globally. This app brings together company profiles, funding information, team sizes, and live news into a single interface that does not require any account or payment to use.
 
-##  Live Demo
 
-| Server | URL |
-|--------|-----|
-| Load Balancer | `http://<lb01-ip>` |
-| Web01 (direct) | `http://<web01-ip>` |
-| Web02 (direct) | `http://<web02-ip>` |
+## Features
 
----
+| Description |
+| Search | Searches across company name, industry, tagline, founder names, and description |
+| Filter | Filter by industry, funding stage, and region simultaneously |
+| Sort | Sort results by trending, newest, most funded, largest team, or alphabetical |
+| Save | Bookmark startups to a personal saved list, persisted in browser localStorage |
+| Compare | Select up to 3 startups and view a side-by-side breakdown of key metrics |
+| List view | Toggle between card grid and compact list layout |
+| News feed | Live startup and technology news pulled from NewsData.io |
+| Currency conversion | Funding figures converted to KES and NGN using ExchangeRate-API |
+| Fallback data | App remains fully functional when APIs are unavailable |
 
-##  Features
-
-| Feature | Description |
-|---------|-------------|
-| **Search** | Full-text search across company names, descriptions, industries, and founders |
-| **Multi-filter** | Filter by industry (8 categories), funding stage (6 stages), and region (5 regions) |
-| **Smart Sort** | Sort by trending, newest, most funded, team size, or alphabetical |
-| **Card / List View** | Toggle between grid and list layouts |
-| **Live Startup News** | Real-time tech/startup news via NewsData.io API |
-| **Detail Modal** | Click any card to see full company profile with funding, team, founders |
-| **Trending Section** | Curated list of the hottest startups this week |
-| **Responsive Design** | Works on mobile, tablet, and desktop |
-| **Skeleton Loaders** | Smooth loading experience with animated placeholders |
-| **Error Handling** | Graceful fallbacks when APIs are unavailable |
-
----
-
-##  APIs Used
+## APIs Used
 
 ### 1. NewsData.io
-- **Purpose**: Fetches live startup and technology news headlines
-- **Endpoint**: `https://newsdata.io/api/1/news?q=startup+funding&category=technology`
-- **Free tier**: 200 requests/day
-- **Documentation**: https://newsdata.io/docs
-- **Credit**: NewsData.io team
+Provides the startup news feed on the page.
 
-### 2. REST Countries
-- **Purpose**: Country/region metadata for startup origins
-- **Endpoint**: `https://restcountries.com/v3.1/alpha/{code}`
-- **Free tier**: Completely free, no key required
-- **Documentation**: https://restcountries.com
-- **Credit**: REST Countries contributors
+- Free tier: 200 requests per day
+- Endpoint used: `GET https://newsdata.io/api/1/news`
+- Query parameters: `q=startup+funding`, `language=en`, `category=technology`
+- Requires a free API key from [newsdata.io](https://newsdata.io)
+- Documentation: https://newsdata.io/docs
 
-### 3. ExchangeRate-API
-- **Purpose**: Currency context for funding figures (USD baseline)
-- **Endpoint**: `https://open.er-api.com/v6/latest/USD`
-- **Free tier**: 1,500 requests/month
-- **Documentation**: https://www.exchangerate-api.com/docs
-- **Credit**: ExchangeRate-API.com
+### 2. ExchangeRate-API
+Used to convert USD funding amounts to Rwanda Frw Shillings (RWF) and Nigerian Naira (NGN) inside the startup detail view.
+
+- Free open endpoint, no API key required
+- Endpoint used: `GET https://open.er-api.com/v6/latest/USD`
+- Documentation: https://www.exchangerate-api.com/docs
+
+### 3. REST Countries
+Used for country and region classification of startup data.
+
+- Completely free, no key required
+- Endpoint: `GET https://restcountries.com/v3.1/alpha/{code}`
+- Documentation: https://restcountries.com
 
 ---
 
-##  Running Locally
+## Tech Stack
 
-### Prerequisites
-- A modern web browser (Chrome, Firefox, Safari, Edge)
-- A local HTTP server (recommended — avoids CORS issues)
-- Optional: Node.js for a quick dev server
+- **Frontend:** HTML, CSS, vanilla JavaScript — no frameworks or build tools
+- **Web server:** Nginx (static file serving)
+- **Load balancer:** Nginx upstream with round-robin distribution
+- **Deployment:** Two Ubuntu 22.04 servers behind a load balancer
+- **Data persistence:** Browser localStorage for saved startups
 
-### Steps
 
+
+## Running Locally
+
+No installation required. The app is plain HTML, CSS, and JavaScript.
+
+**Option 1 — Python server (recommended)**
 ```bash
-# 1. Clone the repository
 git clone https://github.com/duwase7/Startup-Connect.git
 cd Startup-Connect
-
-# 2a. Open directly in browser (basic)
-open index.html
-
-# 2b. OR use a simple local server (recommended)
-# With Python:
 python3 -m http.server 8080
-# Then visit: http://localhost:8080
-
-# 2c. OR with Node.js:
-npx serve .
-# Then visit: http://localhost:3000
 ```
+Open `http://localhost:8080` in your browser.
 
-### API Keys
+**Option 2 — VS Code Live Server**
 
-The app includes fallback data for all APIs, so it works **without keys**. To enable live news:
+Open the project folder in VS Code, right-click `index.html`, and select "Open with Live Server".
 
-1. Sign up free at https://newsdata.io
-2. Copy your API key
-3. Open `app.js` and replace the value for `NEWSDATA_KEY`:
+**Option 3 — Open directly**
+```bash
+open index.html
+```
+Note: some browsers block fetch requests when opening files directly. Use one of the server options above if the news section does not load.
+
+### Connecting the News API
+
+The app ships with fallback news data so it works without a key. To enable live news:
+
+1. Register for a free account at https://newsdata.io
+2. Copy your API key from the dashboard
+3. Open `app.js` and replace the placeholder on line 1:
+
 ```javascript
-const CONFIG = {
-  NEWSDATA_KEY: 'your_key_here',
-  ...
-};
+var NEWSDATA_KEY = 'your_key_here';
 ```
 
-> ⚠️ **Never commit real API keys to a public repository.** Use environment variables or a backend proxy for production.
+Do not commit your real key to a public repository. Add `app.js` to `.gitignore` locally or use a separate config file that is excluded.
 
 ---
 
-## 🚢 Deployment on Web Servers
-
-### Architecture
+## Project Structure
 
 ```
-[Users]
-   │
-   ▼
-[Load Balancer — Lb01]
-   │         │
-   ▼         ▼
-[Web01]   [Web02]
-  (nginx)  (nginx)
-  /var/www/startup-connect
+Startup-Connect/
+├── index.html          HTML structure and page layout
+├── style.css           All styling — dark theme, responsive grid
+├── app.js              Application logic, API calls, rendering
+├── nginx-app.conf      Nginx config for Web01 and Web02
+├── nginx-lb.conf       Nginx load balancer configuration
+├── deploy.sh           Shell script to deploy to both web servers
+├── .gitignore          Excludes sensitive files from version control
+└── README.md           This file
 ```
 
-### Step 1 — Deploy to Web01 and Web02
+---
 
-SSH into each server and run:
+## Deployment
+
+
+Traffic from users hits the load balancer. Nginx distributes each request to Web01 or Web02 in turn using round-robin. Both servers serve identical files.
+
+---
+
+### Step 1 — Prepare Web01 and Web02
+
+Run the following on each web server:
 
 ```bash
-# On each web server (Web01 and Web02):
+sudo apt update && sudo apt install nginx -y
 
-# Install nginx
-sudo apt update && sudo apt install -y nginx
-
-# Create app directory
 sudo mkdir -p /var/www/startup-connect
 sudo chown -R $USER:$USER /var/www/startup-connect
+```
 
-# Copy your files (from your local machine):
-scp index.html style.css app.js ubuntu@<server-ip>:/var/www/startup-connect/
 
-# Configure nginx
+### Step 2 — Deploy Application Files
+
+From your local machine, copy the files to both servers:
+
+```bash
+scp index.html style.css app.js ubuntu@<web01-ip>:/var/www/startup-connect/
+scp index.html style.css app.js ubuntu@<web02-ip>:/var/www/startup-connect/
+```
+
+Or use the provided script (edit the IP addresses in `deploy.sh` first):
+
+```bash
+bash deploy.sh
+```
+
+
+
+### Step 3 — Configure Nginx on Web01 and Web02
+
+Run this on each web server:
+
+```bash
 sudo cp nginx-app.conf /etc/nginx/sites-available/startup-connect
 sudo ln -s /etc/nginx/sites-available/startup-connect /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
@@ -144,25 +160,25 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-Or use the provided script:
-```bash
-bash deploy.sh
+The `nginx-app.conf` file configures Nginx to serve `index.html` for all routes and cache static assets.
+
+---
+
+### Step 4 — Configure the Load Balancer (Lb01)
+
+Open `nginx-lb.conf` and replace the placeholder IPs:
+
+```nginx
+upstream app_servers {
+    server <web01-ip>:80;
+    server <web02-ip>:80;
+}
 ```
 
-### Step 2 — Configure Load Balancer (Lb01)
-
-SSH into Lb01:
+Then on Lb01:
 
 ```bash
-# Install nginx (if not already installed)
-sudo apt update && sudo apt install -y nginx
-
-# Edit nginx-lb.conf and replace IPs:
-nano nginx-lb.conf
-# Replace: web01_IP  →  your actual Web01 IP
-# Replace: web02_IP  →  your actual Web02 IP
-
-# Copy config
+sudo apt update && sudo apt install nginx -y
 sudo cp nginx-lb.conf /etc/nginx/sites-available/startup-connect
 sudo ln -s /etc/nginx/sites-available/startup-connect /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
@@ -170,75 +186,69 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-### Step 3 — Verify Load Balancing
+---
+
+### Step 5 — Verify the Deployment
+
+Visit `http://<lb01-ip>` in a browser. The app should load.
+
+To confirm traffic is reaching both servers, watch the access logs on each while refreshing:
 
 ```bash
-# Test that requests reach both servers
-for i in {1..6}; do curl -s http://<lb01-ip>/health; echo; done
+sudo tail -f /var/log/nginx/access.log
 
-# Check nginx access logs on each web server
 sudo tail -f /var/log/nginx/access.log
 ```
 
----
+Requests should appear on both servers as you refresh. You can also test the health endpoint:
 
-##  Project Structure
-
-```
-startup-connect/
-├── index.html        # Main HTML structure
-├── style.css         # Full stylesheet (dark theme, responsive)
-├── app.js            # Application logic + API integration
-├── nginx-app.conf    # Nginx config for web servers
-├── nginx-lb.conf     # Nginx load balancer config
-├── deploy.sh         # Automated deployment script
-├── .gitignore        # Ignores sensitive files
-└── README.md         # This file
+```bash
+curl http://<lb01-ip>/health
 ```
 
 ---
 
-##  Security
+## Error Handling
 
-- API keys are stored in a `CONFIG` object and should be moved to environment variables in production
-- All API keys provided in the assignment submission comments (not in the repo)
-- Input sanitisation is applied to search queries
-- External links use `rel="noopener noreferrer"` to prevent tab-napping
-
----
-
-##  Challenges & Solutions
-
-| Challenge | Solution |
-|-----------|----------|
-| NewsData.io CORS in some browsers | Added robust try/catch with full fallback dataset |
-| API rate limits on free tier | Implemented client-side caching + curated fallback data |
-| Responsive grid with variable card heights | Used CSS Grid `auto-fill` with `minmax` for fluid layouts |
-| Nginx config across multiple servers | Created reusable config files and deploy script |
+| Scenario | Behaviour |
+|---|---|
+| NewsData.io unavailable or key invalid | Falls back to a static set of 9 curated news articles |
+| ExchangeRate-API unavailable | Currency conversion note is hidden from the modal |
+| No search results | Displays a clear empty state message |
+| API rate limit exceeded | Same fallback as unavailable — no error shown to user |
 
 ---
 
-## Bonus Features Implemented
+## Security Notes
 
-- [x] **Advanced data visualization** — Trending section with rank cards
-- [x] **Caching strategy** — Fallback data prevents repeated API calls
-- [x] **Performance** — Skeleton loaders, lazy rendering, load more pagination
-- [x] **Security** — XSS headers in nginx, input sanitization in JS
-- [x] **Load balancer** — Nginx upstream with round-robin balancing
-
----
-
-##  Credits
-
-- **NewsData.io** — News aggregation API (https://newsdata.io)
-- **REST Countries** — Open country data (https://restcountries.com)
-- **ExchangeRate-API** — Currency exchange data (https://exchangerate-api.com)
-- **Google Fonts** — Syne + DM Sans typefaces
-- Startup data sourced from Crunchbase, TechCrunch, and company websites
+- API keys are stored as variables in `app.js`
+- The `.gitignore` file excludes local config files from version control
+- All external links use `rel="noopener noreferrer"` to prevent tab-napping
+- Nginx is configured with `X-Frame-Options` and `X-Content-Type-Options` headers
+- For a production deployment, API calls should be proxied through a backend server so keys are never exposed in client-side code
 
 ---
 
-##  Author
+## Challenges
 
-**Duwase** — ALX Software Engineering Program  
-Assignment: Playing Around with APIs
+**CORS errors on the news API** — The NewsData.io API blocks direct browser requests from localhost. This was resolved by testing against the deployed server URL and adding a complete fallback data set so development is not blocked when the API is unavailable.
+
+**Nginx load balancer configuration** — Getting `proxy_set_header` correct so the backend servers log the real client IP rather than the load balancer IP required reading through the Nginx documentation. The final config passes `X-Real-IP` and `X-Forwarded-For` headers from the proxy to both web servers.
+
+**localStorage and tab state** — Keeping the saved list in sync across the card grid, the modal, and the saved tab required centralising state into a single `appState` object that every render function reads from rather than reading the DOM directly.
+
+---
+
+## Credits
+
+- [NewsData.io](https://newsdata.io) — news aggregation API
+- [REST Countries](https://restcountries.com) — open country data
+- [ExchangeRate-API](https://www.exchangerate-api.com) — free exchange rate data
+- [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk) — Google Fonts
+- Company data sourced from Crunchbase, TechCrunch, and individual company websites
+
+---
+
+## Author
+
+Duwase — ALX Software Engineering, Cohort 20

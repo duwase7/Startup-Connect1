@@ -1,20 +1,15 @@
-# API keys / environment
 .env
 .env.local
 config.local.js
 secrets.js
 
-# OS files
 .DS_Store
 Thumbs.db
 
-# Editor
 .vscode/
 .idea/
 
-# Node (if used for dev server)
 node_modules/
 package-lock.json
 
-# Logs
 *.log

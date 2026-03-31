@@ -1,26 +1,6 @@
-/*
-  app.js - Startup Connect
-  This file handles all the JavaScript for the app.
-  It loads startup data, handles filters/search, fetches news from NewsData.io,
-  gets exchange rates from ExchangeRate-API, and renders everything to the page.
-
-  APIs used:
-    1. NewsData.io - for startup news (free, 200 req/day)
-    2. ExchangeRate-API - for currency conversion (free, open endpoint)
-    3. REST Countries - used for region logic (free, no key needed)
-*/
-
-// -----------------------------------------
-// API keys - replace with your own
-// Sign up free at https://newsdata.io
-// -----------------------------------------
 var NEWSDATA_KEY = 'pub_64e9c8f2d1a5b3e7f9012345abcdef12';
 
-// -----------------------------------------
-// Startup data - 24 real companies
-// I put the data directly here so the app
-// works without a backend database
-// -----------------------------------------
+
 var STARTUPS = [
   {
     id: 1,
@@ -408,7 +388,6 @@ var STARTUPS = [
   }
 ];
 
-// remove duplicate entry (both #12 and #24 are Twiga) - keep only unique names
 var seen = {};
 STARTUPS = STARTUPS.filter(function(s) {
   if (seen[s.name]) return false;
@@ -416,33 +395,26 @@ STARTUPS = STARTUPS.filter(function(s) {
   return true;
 });
 
-// -----------------------------------------
-// App state - I track everything here
-// so I can re-render without reloading
-// -----------------------------------------
 var appState = {
   filtered:   STARTUPS.slice(),
   displayed:  12,
   view:       'grid',
   query:      '',
-  tab:        'all',    // 'all' or 'saved'
+  tab:        'all',    
   filters: {
     industry: '',
     stage:    '',
     region:   '',
     sort:     'trending'
   },
-  // saved IDs come from localStorage so they persist after page refresh
+
   saved:     JSON.parse(localStorage.getItem('sc_saved') || '[]'),
-  comparing: []         // array of IDs being compared (max 3)
+  comparing: []         
 };
 
-// exchange rates from API (loaded in background)
+
 var exchangeRates = null;
 
-// -----------------------------------------
-// Page element references
-// -----------------------------------------
 var cardGrid     = document.getElementById('card-grid');
 var resultCount  = document.getElementById('results-count');
 var searchInput  = document.getElementById('search-input');
@@ -451,26 +423,22 @@ var modalOverlay = document.getElementById('modal-overlay');
 var modalContent = document.getElementById('modal-content');
 var toastEl      = document.getElementById('toast-msg');
 
-// -----------------------------------------
-// Run on page load
-// -----------------------------------------
 document.addEventListener('DOMContentLoaded', function() {
 
-  // show skeleton cards while we "load"
+
   showSkeletons();
 
-  // short delay so the skeleton shows, then render real cards
   setTimeout(function() {
     applyFiltersAndRender();
     renderTrending();
     animateStatCounter();
   }, 600);
 
-  // fetch live news and exchange rates in background
+
   fetchNews();
   fetchExchangeRates();
 
-  // wire up search
+ 
   document.getElementById('search-btn').addEventListener('click', handleSearch);
   searchInput.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') handleSearch();
@@ -482,7 +450,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // wire up filter dropdowns
+
   document.getElementById('filter-industry').addEventListener('change', function() {
     appState.filters.industry = this.value;
     appState.displayed = 12;
@@ -504,18 +472,16 @@ document.addEventListener('DOMContentLoaded', function() {
     applyFiltersAndRender();
   });
 
-  // reset all filters
   document.getElementById('reset-btn').addEventListener('click', function() {
     resetAll();
   });
 
-  // load more
   loadMoreBtn.addEventListener('click', function() {
     appState.displayed += 8;
     renderCards();
   });
 
-  // modal close button
+
   document.getElementById('modal-close-btn').addEventListener('click', closeModal);
   modalOverlay.addEventListener('click', function(e) {
     if (e.target === modalOverlay) closeModal();
@@ -524,7 +490,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.key === 'Escape') closeModal();
   });
 
-  // view toggle
   document.getElementById('grid-btn').addEventListener('click', function() {
     setView('grid');
   });
@@ -532,7 +497,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setView('list');
   });
 
-  // tabs
   document.getElementById('tab-all').addEventListener('click', function() {
     appState.tab = 'all';
     appState.displayed = 12;
@@ -548,14 +512,10 @@ document.addEventListener('DOMContentLoaded', function() {
     applyFiltersAndRender();
   });
 
-  // compare bar buttons
   document.getElementById('compare-clear-btn').addEventListener('click', clearCompare);
   document.getElementById('compare-go-btn').addEventListener('click', openCompareModal);
 });
 
-// -----------------------------------------
-// SEARCH
-// -----------------------------------------
 function handleSearch() {
   appState.query = searchInput.value.trim().toLowerCase();
   appState.displayed = 12;
@@ -565,14 +525,9 @@ function handleSearch() {
   }
 }
 
-// -----------------------------------------
-// FILTER + SORT + RENDER
-// This is the main function that takes
-// the current state and shows the right cards
-// -----------------------------------------
 function applyFiltersAndRender() {
 
-  // start with all startups or just saved ones
+
   var data;
   if (appState.tab === 'saved') {
     data = STARTUPS.filter(function(s) {
@@ -582,7 +537,6 @@ function applyFiltersAndRender() {
     data = STARTUPS.slice();
   }
 
-  // apply text search
   if (appState.query) {
     data = data.filter(function(s) {
       return (
@@ -595,22 +549,18 @@ function applyFiltersAndRender() {
     });
   }
 
-  // industry filter
   if (appState.filters.industry) {
     data = data.filter(function(s) { return s.industry === appState.filters.industry; });
   }
 
-  // stage filter
   if (appState.filters.stage) {
     data = data.filter(function(s) { return s.stage === appState.filters.stage; });
   }
 
-  // region filter
   if (appState.filters.region) {
     data = data.filter(function(s) { return s.region === appState.filters.region; });
   }
 
-  // sort
   var sort = appState.filters.sort;
   if (sort === 'trending') {
     data.sort(function(a, b) { return (b.trending ? 1 : 0) - (a.trending ? 1 : 0); });
@@ -628,7 +578,6 @@ function applyFiltersAndRender() {
   renderCards();
 }
 
-// helper to parse funding string like "$474M" into a number
 function parseFundingNum(str) {
   if (!str) return 0;
   var n = parseFloat(str.replace(/[^0-9.]/g, ''));
@@ -637,9 +586,6 @@ function parseFundingNum(str) {
   return n;
 }
 
-// -----------------------------------------
-// RENDER CARDS
-// -----------------------------------------
 function renderCards() {
   var list  = appState.filtered;
   var total = list.length;
@@ -664,13 +610,13 @@ function renderCards() {
 
   loadMoreBtn.style.display = show >= total ? 'none' : 'block';
 
-  // attach click events after rendering
+
   var cards = cardGrid.querySelectorAll('.startup-card');
   for (var c = 0; c < cards.length; c++) {
     (function(card) {
       var id = parseInt(card.getAttribute('data-id'), 10);
       card.addEventListener('click', function(e) {
-        // don't open modal when action buttons are clicked
+      
         if (e.target.closest('.action-btn')) return;
         var startup = getStartupById(id);
         if (startup) openModal(startup);
@@ -678,7 +624,7 @@ function renderCards() {
     })(cards[c]);
   }
 
-  // save button events
+
   var saveBtns = cardGrid.querySelectorAll('.btn-save');
   for (var s = 0; s < saveBtns.length; s++) {
     (function(btn) {
@@ -689,7 +635,6 @@ function renderCards() {
     })(saveBtns[s]);
   }
 
-  // compare button events
   var cmpBtns = cardGrid.querySelectorAll('.btn-cmp');
   for (var k = 0; k < cmpBtns.length; k++) {
     (function(btn) {
@@ -701,10 +646,6 @@ function renderCards() {
   }
 }
 
-// -----------------------------------------
-// BUILD ONE CARD'S HTML
-// Uses initials as the icon (no emoji)
-// -----------------------------------------
 function buildCardHTML(s, index) {
   var delay     = (index % 12) * 0.04;
   var isSaved   = appState.saved.indexOf(s.id) !== -1;
@@ -747,14 +688,14 @@ function buildCardHTML(s, index) {
     '</article>';
 }
 
-// get 2-letter initials from company name
+
 function getInitials(name) {
   var parts = name.trim().split(/\s+/);
   if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
   return (parts[0][0] + parts[1][0]).toUpperCase();
 }
 
-// assign a color to each industry
+
 function getIconColor(industry) {
   var colors = {
     fintech:    '#6c47ff',
@@ -769,9 +710,6 @@ function getIconColor(industry) {
   return colors[industry] || '#555';
 }
 
-// -----------------------------------------
-// SAVE / BOOKMARK
-// -----------------------------------------
 function toggleSave(id) {
   var startup = getStartupById(id);
   if (!startup) return;
@@ -785,19 +723,14 @@ function toggleSave(id) {
     showToast(startup.name + ' removed from saved');
   }
 
-  // persist to localStorage
   localStorage.setItem('sc_saved', JSON.stringify(appState.saved));
 
-  // update the badge number on the tab
   var badge = document.getElementById('saved-badge');
   if (badge) badge.textContent = appState.saved.length || '';
 
   renderCards();
 }
 
-// -----------------------------------------
-// COMPARE
-// -----------------------------------------
 function toggleCompare(id) {
   var startup = getStartupById(id);
   if (!startup) return;
@@ -860,7 +793,7 @@ function openCompareModal() {
     if (s) startups.push(s);
   }
 
-  // build a comparison table
+
   var fields = [
     ['Industry',   function(s) { return capitalize(s.industry); }],
     ['Stage',      function(s) { return capitalize(s.stage); }],
@@ -899,9 +832,6 @@ function openCompareModal() {
   document.body.style.overflow = 'hidden';
 }
 
-// -----------------------------------------
-// MODAL - shows full startup details
-// -----------------------------------------
 function openModal(s) {
   var isSaved   = appState.saved.indexOf(s.id) !== -1;
   var iconColor = getIconColor(s.industry);
@@ -941,7 +871,6 @@ function openModal(s) {
     '<button class="btn-secondary" id="modal-cmp-btn">Add to Compare</button>' +
     '</div>';
 
-  // attach the save/compare actions inside modal
   document.getElementById('modal-save-btn').addEventListener('click', function() {
     toggleSave(s.id);
     closeModal();
@@ -960,9 +889,6 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 
-// -----------------------------------------
-// TRENDING SECTION
-// -----------------------------------------
 function renderTrending() {
   var trendingStartups = STARTUPS.filter(function(s) { return s.trending; });
   var trendingList     = document.getElementById('trending-list');
@@ -982,9 +908,6 @@ function renderTrending() {
   trendingList.innerHTML = html;
 }
 
-// -----------------------------------------
-// NEWS - NewsData.io API
-// -----------------------------------------
 function fetchNews() {
   var newsGrid = document.getElementById('news-grid');
   if (!newsGrid) return;
@@ -1039,7 +962,6 @@ function buildNewsCard(a) {
     '</a>';
 }
 
-// fallback news shown when API is down or key is invalid
 var FALLBACK_NEWS = [
   { title: 'African Fintech Startups Raised $1.3B in Q1 2025', description: 'Fintech continues to dominate African startup funding, with mobile payments and lending platforms leading investment activity.', source_id: 'TechCrunch Africa', pubDate: '2025-03-15', link: 'https://techcrunch.com' },
   { title: 'OpenAI Reaches 100 Million Weekly Active Users', description: 'ChatGPT and other OpenAI products have seen fast growth, pushing the company toward a $150B valuation this year.', source_id: 'The Verge', pubDate: '2025-03-10', link: 'https://theverge.com' },
@@ -1052,10 +974,6 @@ var FALLBACK_NEWS = [
   { title: 'Rwanda Ranked Top Startup Hub in East Africa', description: 'The country continues attracting international companies with competitive tax policies and strong digital infrastructure.', source_id: 'African Business', pubDate: '2025-02-10', link: '#' }
 ];
 
-// -----------------------------------------
-// EXCHANGE RATES - ExchangeRate-API
-// Free open endpoint, no key needed
-// -----------------------------------------
 function fetchExchangeRates() {
   fetch('https://open.er-api.com/v6/latest/USD')
     .then(function(res) {
@@ -1070,11 +988,6 @@ function fetchExchangeRates() {
     });
 }
 
-// -----------------------------------------
-// SKELETON LOADERS
-// These placeholder cards show while real
-// data is loading to avoid blank screens
-// -----------------------------------------
 function showSkeletons() {
   var html = '';
   for (var i = 0; i < 9; i++) {
@@ -1097,10 +1010,6 @@ function showSkeletons() {
   cardGrid.innerHTML = html;
 }
 
-// -----------------------------------------
-// STAT COUNTER ANIMATION
-// Counts up from 0 to total number
-// -----------------------------------------
 function animateStatCounter() {
   var el = document.getElementById('stat-total');
   if (!el) return;
@@ -1114,9 +1023,6 @@ function animateStatCounter() {
   }, 50);
 }
 
-// -----------------------------------------
-// RESET ALL FILTERS
-// -----------------------------------------
 function resetAll() {
   appState.query   = '';
   appState.filters = { industry: '', stage: '', region: '', sort: 'trending' };
@@ -1130,9 +1036,6 @@ function resetAll() {
   showToast('All filters cleared');
 }
 
-// -----------------------------------------
-// VIEW TOGGLE (grid / list)
-// -----------------------------------------
 function setView(v) {
   appState.view = v;
   if (v === 'list') {
@@ -1144,9 +1047,6 @@ function setView(v) {
   document.getElementById('list-btn').classList.toggle('active', v === 'list');
 }
 
-// -----------------------------------------
-// TOAST NOTIFICATION
-// -----------------------------------------
 var toastTimer = null;
 function showToast(msg, isWarn) {
   toastEl.textContent = msg;
@@ -1158,9 +1058,6 @@ function showToast(msg, isWarn) {
   }, 2500);
 }
 
-// -----------------------------------------
-// HELPER FUNCTIONS
-// -----------------------------------------
 function getStartupById(id) {
   for (var i = 0; i < STARTUPS.length; i++) {
     if (STARTUPS[i].id === id) return STARTUPS[i];

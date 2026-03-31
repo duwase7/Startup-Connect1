@@ -9,7 +9,7 @@
 </head>
 <body>
 
-  <!-- top navigation bar -->
+
   <nav class="navbar">
     <div class="nav-container">
       <a class="logo" href="#">
@@ -25,7 +25,7 @@
     </div>
   </nav>
 
-  <!-- hero / landing section -->
+
   <header class="hero" id="hero">
     <div class="hero-grid-bg"></div>
     <div class="hero-inner">
@@ -36,7 +36,7 @@
         Real data, live news, and tools to compare companies side by side.
       </p>
 
-      <!-- search bar -->
+ 
       <div class="search-wrap">
         <div class="search-bar" id="main-search-bar">
           <input
@@ -50,7 +50,7 @@
       </div>
     </div>
 
-    <!-- quick stat numbers below hero text -->
+  
     <div class="hero-stats">
       <div class="stat-item">
         <span class="stat-number" id="stat-total">--</span>
@@ -74,7 +74,6 @@
     </div>
   </header>
 
-  <!-- filter bar - sticks below nav when you scroll -->
   <section class="filter-section" id="explore">
     <div class="container">
       <div class="filter-bar">
@@ -137,7 +136,6 @@
     </div>
   </section>
 
-  <!-- results count + view toggle row -->
   <div class="container results-row">
     <span class="results-count" id="results-count">Loading...</span>
     <div class="view-toggle">
@@ -146,23 +144,21 @@
     </div>
   </div>
 
-  <!-- tabs: All / Saved -->
   <div class="container tab-row">
     <button class="tab-btn active" id="tab-all">All Startups</button>
     <button class="tab-btn" id="tab-saved">Saved  <span class="saved-badge" id="saved-badge"></span></button>
   </div>
 
-  <!-- main card grid -->
+
   <main class="container card-grid" id="card-grid">
-    <!-- cards get rendered here by JS -->
+
   </main>
 
-  <!-- load more button -->
+
   <div class="load-more-row">
     <button class="load-more-btn" id="load-more-btn">Load More</button>
   </div>
 
-  <!-- trending section -->
   <section class="section-block trending-block" id="trending">
     <div class="container">
       <div class="section-head">
@@ -170,12 +166,12 @@
         <p>Startups getting the most attention right now.</p>
       </div>
       <div class="trending-list" id="trending-list">
-        <!-- filled by JS -->
+    
       </div>
     </div>
   </section>
 
-  <!-- news section - NewsData.io API -->
+
   <section class="section-block news-block" id="news-section">
     <div class="container">
       <div class="section-head">
@@ -188,7 +184,7 @@
     </div>
   </section>
 
-  <!-- compare bar - shows at bottom when 2+ selected -->
+ 
   <div class="compare-bar" id="compare-bar">
     <div class="compare-left">
       <span class="compare-label">Compare:</span>
@@ -200,7 +196,7 @@
     </div>
   </div>
 
-  <!-- about section -->
+
   <section class="section-block about-block" id="about">
     <div class="container about-inner">
       <div class="about-text">
@@ -235,17 +231,17 @@
     </div>
   </section>
 
-  <!-- modal popup for startup detail -->
+
   <div class="modal-overlay" id="modal-overlay">
     <div class="modal-box" id="modal-box">
       <button class="modal-close-btn" id="modal-close-btn">X</button>
       <div class="modal-content" id="modal-content">
-        <!-- filled by JS when a card is clicked -->
+
       </div>
     </div>
   </div>
 
-  <!-- small toast notification -->
+
   <div class="toast-msg" id="toast-msg"></div>
 
   <footer class="site-footer">
