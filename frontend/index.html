@@ -2,51 +2,85 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Startup Connect — Discover & Explore Startups</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Startup Connect</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-  <nav class="nav">
-    <div class="nav-inner">
+  <!-- top navigation bar -->
+  <nav class="navbar">
+    <div class="nav-container">
       <a class="logo" href="#">
-        <span class="logo-mark">SC</span>
-        <span>Startup<strong>Connect</strong></span>
+        <span class="logo-box">SC</span>
+        <span class="logo-text">Startup Connect</span>
       </a>
       <div class="nav-links">
         <a href="#explore">Explore</a>
         <a href="#trending">Trending</a>
+        <a href="#news-section">News</a>
         <a href="#about">About</a>
       </div>
     </div>
   </nav>
 
+  <!-- hero / landing section -->
   <header class="hero" id="hero">
-    <div class="hero-bg-grid"></div>
-    <div class="hero-content">
-      <div class="hero-badge">🌍 Discover the Next Big Thing</div>
-      <h1>Find Startups That<br/><em>Change the World</em></h1>
-      <p class="hero-sub">Explore thousands of startups across industries. Filter by stage, category, funding, and more — powered by live data.</p>
-      <div class="search-bar" id="main-search">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input type="text" id="search-input" placeholder="Search startups, industries, technologies..." autocomplete="off"/>
-        <button id="search-btn">Search</button>
+    <div class="hero-grid-bg"></div>
+    <div class="hero-inner">
+      <p class="hero-label">Global Startup Discovery Platform</p>
+      <h1>Find Startups That<br /><span class="hero-accent">Change the World</span></h1>
+      <p class="hero-sub">
+        Browse hundreds of startups by industry, funding stage, and region.
+        Real data, live news, and tools to compare companies side by side.
+      </p>
+
+      <!-- search bar -->
+      <div class="search-wrap">
+        <div class="search-bar" id="main-search-bar">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search by name, industry, founder..."
+            autocomplete="off"
+          />
+          <button id="search-btn" class="search-submit">Search</button>
+        </div>
       </div>
     </div>
+
+    <!-- quick stat numbers below hero text -->
     <div class="hero-stats">
-      <div class="stat"><span class="stat-num" id="stat-total">—</span><span>Startups</span></div>
-      <div class="stat"><span class="stat-num">12</span><span>Industries</span></div>
-      <div class="stat"><span class="stat-num">Live</span><span>Data</span></div>
+      <div class="stat-item">
+        <span class="stat-number" id="stat-total">--</span>
+        <span class="stat-label">Startups</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number">8</span>
+        <span class="stat-label">Industries</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number">5</span>
+        <span class="stat-label">Regions</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number">Live</span>
+        <span class="stat-label">News Feed</span>
+      </div>
     </div>
   </header>
 
-  <section class="filters-section" id="explore">
+  <!-- filter bar - sticks below nav when you scroll -->
+  <section class="filter-section" id="explore">
     <div class="container">
-      <div class="filters-bar">
-        <div class="filter-group">
-          <label>Industry</label>
+      <div class="filter-bar">
+
+        <div class="filter-item">
+          <label for="filter-industry">Industry</label>
           <select id="filter-industry">
             <option value="">All Industries</option>
             <option value="fintech">Fintech</option>
@@ -59,8 +93,9 @@
             <option value="logistics">Logistics</option>
           </select>
         </div>
-        <div class="filter-group">
-          <label>Stage</label>
+
+        <div class="filter-item">
+          <label for="filter-stage">Stage</label>
           <select id="filter-stage">
             <option value="">All Stages</option>
             <option value="idea">Idea</option>
@@ -68,11 +103,14 @@
             <option value="seed">Seed</option>
             <option value="series-a">Series A</option>
             <option value="series-b">Series B</option>
+            <option value="series-c">Series C</option>
+            <option value="series-d">Series D</option>
             <option value="growth">Growth</option>
           </select>
         </div>
-        <div class="filter-group">
-          <label>Region</label>
+
+        <div class="filter-item">
+          <label for="filter-region">Region</label>
           <select id="filter-region">
             <option value="">All Regions</option>
             <option value="africa">Africa</option>
@@ -82,104 +120,137 @@
             <option value="latam">Latin America</option>
           </select>
         </div>
-        <div class="filter-group">
-          <label>Sort By</label>
+
+        <div class="filter-item">
+          <label for="filter-sort">Sort By</label>
           <select id="filter-sort">
             <option value="trending">Trending</option>
-            <option value="newest">Newest</option>
+            <option value="newest">Newest First</option>
             <option value="funding">Most Funded</option>
-            <option value="employees">Team Size</option>
-            <option value="name">Name A–Z</option>
+            <option value="employees">Largest Team</option>
+            <option value="name">Name A-Z</option>
           </select>
         </div>
-        <button class="reset-btn" id="reset-filters">Reset</button>
+
+        <button class="reset-btn" id="reset-btn">Reset</button>
       </div>
     </div>
   </section>
 
-  <div class="container results-meta">
-    <span id="results-count">Loading startups...</span>
+  <!-- results count + view toggle row -->
+  <div class="container results-row">
+    <span class="results-count" id="results-count">Loading...</span>
     <div class="view-toggle">
-      <button class="view-btn active" id="grid-view-btn" title="Grid view">
-        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1 2.5A1.5 1.5 0 012.5 1h3A1.5 1.5 0 017 2.5v3A1.5 1.5 0 015.5 7h-3A1.5 1.5 0 011 5.5v-3zm8 0A1.5 1.5 0 0110.5 1h3A1.5 1.5 0 0115 2.5v3A1.5 1.5 0 0113.5 7h-3A1.5 1.5 0 019 5.5v-3zm-8 8A1.5 1.5 0 012.5 9h3A1.5 1.5 0 017 10.5v3A1.5 1.5 0 015.5 15h-3A1.5 1.5 0 011 13.5v-3zm8 0A1.5 1.5 0 0110.5 9h3a1.5 1.5 0 011.5 1.5v3a1.5 1.5 0 01-1.5 1.5h-3A1.5 1.5 0 019 13.5v-3z"/></svg>
-      </button>
-      <button class="view-btn" id="list-view-btn" title="List view">
-        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5z"/></svg>
-      </button>
+      <button class="view-btn active" id="grid-btn" title="Grid view">Grid</button>
+      <button class="view-btn" id="list-btn" title="List view">List</button>
     </div>
   </div>
 
-  <main class="container" id="startup-grid">
+  <!-- tabs: All / Saved -->
+  <div class="container tab-row">
+    <button class="tab-btn active" id="tab-all">All Startups</button>
+    <button class="tab-btn" id="tab-saved">Saved  <span class="saved-badge" id="saved-badge"></span></button>
+  </div>
+
+  <!-- main card grid -->
+  <main class="container card-grid" id="card-grid">
+    <!-- cards get rendered here by JS -->
   </main>
 
-  <div class="load-more-wrap">
-    <button class="load-more-btn" id="load-more-btn">Load More Startups</button>
+  <!-- load more button -->
+  <div class="load-more-row">
+    <button class="load-more-btn" id="load-more-btn">Load More</button>
   </div>
 
-  <section class="trending-section" id="trending">
+  <!-- trending section -->
+  <section class="section-block trending-block" id="trending">
     <div class="container">
-      <div class="section-header">
-        <h2>🔥 Trending This Week</h2>
-        <p>Startups making waves right now — powered by news mentions & funding signals.</p>
+      <div class="section-head">
+        <h2>Trending This Week</h2>
+        <p>Startups getting the most attention right now.</p>
       </div>
-      <div class="trending-grid" id="trending-grid">
-      
+      <div class="trending-list" id="trending-list">
+        <!-- filled by JS -->
       </div>
     </div>
   </section>
 
-  <section class="news-section" id="news-section">
+  <!-- news section - NewsData.io API -->
+  <section class="section-block news-block" id="news-section">
     <div class="container">
-      <div class="section-header">
-        <h2>📰 Startup News</h2>
-        <p>Latest headlines from the global startup ecosystem.</p>
+      <div class="section-head">
+        <h2>Startup News</h2>
+        <p>Latest headlines from the global startup ecosystem. Powered by NewsData.io.</p>
       </div>
       <div class="news-grid" id="news-grid">
-        <div class="loading-msg">Fetching latest news...</div>
+        <p class="loading-text">Fetching latest news...</p>
       </div>
     </div>
   </section>
 
-  <section class="about-section" id="about">
+  <!-- compare bar - shows at bottom when 2+ selected -->
+  <div class="compare-bar" id="compare-bar">
+    <div class="compare-left">
+      <span class="compare-label">Compare:</span>
+      <div class="compare-chips" id="compare-chips"></div>
+    </div>
+    <div class="compare-right">
+      <button class="compare-clear-btn" id="compare-clear-btn">Clear</button>
+      <button class="compare-go-btn" id="compare-go-btn">Compare Now</button>
+    </div>
+  </div>
+
+  <!-- about section -->
+  <section class="section-block about-block" id="about">
     <div class="container about-inner">
-      <div>
+      <div class="about-text">
         <h2>About Startup Connect</h2>
-        <p>Startup Connect is a discovery platform that aggregates live startup data, funding signals, and industry news to help founders, investors, and job-seekers find opportunities in the global ecosystem.</p>
-        <p>Built for an ALX assignment, it demonstrates real-world API integration, server-side deployment across multiple web nodes, and load-balanced traffic distribution.</p>
+        <p>
+          Startup Connect is a discovery platform I built for the ALX API assignment.
+          It pulls live news from NewsData.io, uses REST Countries for country data,
+          and ExchangeRate-API to show funding in local currencies.
+        </p>
+        <p>
+          The app is deployed across two Ubuntu web servers behind an Nginx load
+          balancer, following the infrastructure setup we covered in the ALX programme.
+        </p>
       </div>
       <div class="about-apis">
         <h3>APIs Used</h3>
         <ul>
           <li>
-            <strong>NewsData.io</strong> — Startup & tech news headlines<br/>
+            <strong>NewsData.io</strong> - startup and tech news<br />
             <a href="https://newsdata.io/docs" target="_blank">newsdata.io/docs</a>
           </li>
           <li>
-            <strong>REST Countries</strong> — Country/region metadata<br/>
+            <strong>REST Countries</strong> - country and region info<br />
             <a href="https://restcountries.com" target="_blank">restcountries.com</a>
           </li>
           <li>
-            <strong>ExchangeRate-API</strong> — Currency context for funding figures<br/>
-            <a href="https://www.exchangerate-api.com/docs" target="_blank">exchangerate-api.com/docs</a>
+            <strong>ExchangeRate-API</strong> - currency conversion<br />
+            <a href="https://www.exchangerate-api.com/docs" target="_blank">exchangerate-api.com</a>
           </li>
         </ul>
       </div>
     </div>
   </section>
 
-
-  <div class="modal-backdrop" id="modal-backdrop">
-    <div class="modal" id="startup-modal">
-      <button class="modal-close" id="modal-close">✕</button>
-      <div class="modal-body" id="modal-body"></div>
+  <!-- modal popup for startup detail -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-box" id="modal-box">
+      <button class="modal-close-btn" id="modal-close-btn">X</button>
+      <div class="modal-content" id="modal-content">
+        <!-- filled by JS when a card is clicked -->
+      </div>
     </div>
   </div>
 
-  <div class="toast" id="toast"></div>
+  <!-- small toast notification -->
+  <div class="toast-msg" id="toast-msg"></div>
 
-  <footer class="footer">
+  <footer class="site-footer">
     <div class="container">
-      <p>Startup Connect &copy; 2025 · Built for ALX API Assignment · APIs: NewsData.io, REST Countries, ExchangeRate-API</p>
+      <p>Startup Connect &copy; 2025 &middot; ALX API Assignment &middot; APIs: NewsData.io, REST Countries, ExchangeRate-API</p>
     </div>
   </footer>
 

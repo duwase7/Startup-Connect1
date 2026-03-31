@@ -1,4 +1,4 @@
-# 🚀 Startup Connect
+# Startup Connect
 
 **Discover, filter, and explore startups from across the globe — powered by live API data.**
 
@@ -6,7 +6,7 @@ Startup Connect is a fully responsive web application that aggregates startup in
 
 ---
 
-## 🌍 Live Demo
+##  Live Demo
 
 | Server | URL |
 |--------|-----|
@@ -16,7 +16,7 @@ Startup Connect is a fully responsive web application that aggregates startup in
 
 ---
 
-## ✨ Features
+##  Features
 
 | Feature | Description |
 |---------|-------------|
@@ -33,7 +33,7 @@ Startup Connect is a fully responsive web application that aggregates startup in
 
 ---
 
-## 🔌 APIs Used
+##  APIs Used
 
 ### 1. NewsData.io
 - **Purpose**: Fetches live startup and technology news headlines
@@ -58,7 +58,7 @@ Startup Connect is a fully responsive web application that aggregates startup in
 
 ---
 
-## 🛠️ Running Locally
+##  Running Locally
 
 ### Prerequisites
 - A modern web browser (Chrome, Firefox, Safari, Edge)
@@ -182,7 +182,7 @@ sudo tail -f /var/log/nginx/access.log
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 startup-connect/
@@ -198,7 +198,7 @@ startup-connect/
 
 ---
 
-## 🔐 Security
+##  Security
 
 - API keys are stored in a `CONFIG` object and should be moved to environment variables in production
 - All API keys provided in the assignment submission comments (not in the repo)
@@ -207,7 +207,7 @@ startup-connect/
 
 ---
 
-## 🧗 Challenges & Solutions
+##  Challenges & Solutions
 
 | Challenge | Solution |
 |-----------|----------|
@@ -218,7 +218,7 @@ startup-connect/
 
 ---
 
-## 🏆 Bonus Features Implemented
+## Bonus Features Implemented
 
 - [x] **Advanced data visualization** — Trending section with rank cards
 - [x] **Caching strategy** — Fallback data prevents repeated API calls
@@ -228,7 +228,7 @@ startup-connect/
 
 ---
 
-## 📜 Credits
+##  Credits
 
 - **NewsData.io** — News aggregation API (https://newsdata.io)
 - **REST Countries** — Open country data (https://restcountries.com)
@@ -238,7 +238,7 @@ startup-connect/
 
 ---
 
-## 👤 Author
+##  Author
 
 **Duwase** — ALX Software Engineering Program  
 Assignment: Playing Around with APIs

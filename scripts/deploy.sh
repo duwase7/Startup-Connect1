@@ -1,44 +1,46 @@
 #!/bin/bash
-# deploy.sh — Deploy Startup Connect to Web01 and Web02
-# Usage: bash deploy.sh
-# Requirements: SSH access to web servers, nginx installed
+# deploy.sh
+# This script copies the app files to both web servers and sets up nginx
+#
+# How to use:
+#   1. Edit the IP addresses below
+#   2. Run:  bash deploy.sh
+#
+# Make sure you have SSH access to both servers first
 
-set -e
-
-# ---- Configuration — update these ----
-WEB01="ubuntu@<web01-ip>"
-WEB02="ubuntu@<web02-ip>"
+WEB01="ubuntu@<your-web01-ip>"
+WEB02="ubuntu@<your-web02-ip>"
 APP_DIR="/var/www/startup-connect"
-APP_FILES="index.html style.css app.js nginx-app.conf"
 
-echo "🚀 Deploying Startup Connect..."
+echo "Starting deployment..."
 
-deploy_to() {
+# function to deploy to one server
+deploy_to_server() {
   local SERVER=$1
-  echo "📦 Deploying to $SERVER..."
+  echo ""
+  echo "--- Deploying to $SERVER ---"
 
-  # Create app directory
-  ssh $SERVER "sudo mkdir -p $APP_DIR"
-  ssh $SERVER "sudo chown -R \$USER:\$USER $APP_DIR"
+  # create the folder on the server
+  ssh $SERVER "sudo mkdir -p $APP_DIR && sudo chown -R \$USER:\$USER $APP_DIR"
 
-  # Copy app files
-  for f in $APP_FILES; do
-    scp $f $SERVER:$APP_DIR/ 2>/dev/null || true
-  done
+  # copy the app files over
+  scp index.html style.css app.js $SERVER:$APP_DIR/
 
-  # Configure nginx
-  ssh $SERVER "sudo cp $APP_DIR/nginx-app.conf /etc/nginx/sites-available/startup-connect"
+  # set up the nginx config
+  scp nginx-app.conf $SERVER:/tmp/startup-connect.conf
+  ssh $SERVER "sudo cp /tmp/startup-connect.conf /etc/nginx/sites-available/startup-connect"
   ssh $SERVER "sudo ln -sf /etc/nginx/sites-available/startup-connect /etc/nginx/sites-enabled/startup-connect"
   ssh $SERVER "sudo rm -f /etc/nginx/sites-enabled/default"
+
+  # test nginx config then reload it
   ssh $SERVER "sudo nginx -t && sudo systemctl reload nginx"
 
-  echo "✅ Deployed to $SERVER"
+  echo "Done: $SERVER"
 }
 
-deploy_to $WEB01
-deploy_to $WEB02
+deploy_to_server $WEB01
+deploy_to_server $WEB02
 
 echo ""
-echo "🎉 Deployment complete!"
-echo "   App running on Web01 and Web02"
-echo "   Now configure your load balancer with nginx-lb.conf"
+echo "Deployment finished."
+echo "Now set up the load balancer manually using nginx-lb.conf"
