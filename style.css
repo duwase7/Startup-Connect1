@@ -174,7 +174,6 @@ body {
   line-height: 1.65;
 }
 
-
 .search-wrap {
   max-width: 580px;
   margin: 0 auto;
@@ -226,7 +225,6 @@ body {
   opacity: 0.88;
   transform: translateY(-1px);
 }
-
 
 .hero-stats {
   position: relative;
@@ -435,6 +433,7 @@ body {
 .card-grid.list-mode {
   grid-template-columns: 1fr;
 }
+
 
 .startup-card {
   background: var(--card);
@@ -683,7 +682,6 @@ body {
   gap: 10px;
 }
 
-
 .section-head h2::before {
   content: '';
   display: inline-block;
@@ -807,6 +805,62 @@ body {
 .news-date   { font-size: 11px; color: var(--text-dim); }
 .loading-text { color: var(--text-mid); font-size: 13px; padding: 1.5rem 0; }
 
+.api-status {
+  margin-bottom: 1rem;
+  min-height: 22px;
+}
+
+.status-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-mid);
+  padding: 3px 10px;
+}
+
+.status-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--green);
+  background: var(--green-dim);
+  border: 1px solid rgba(0, 214, 143, 0.2);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+.status-live::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-fallback {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--orange);
+  background: var(--orange-dim);
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+.status-fallback::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--orange);
+  border-radius: 50%;
+  display: inline-block;
+}
+
 
 .compare-bar {
   position: fixed;
@@ -895,6 +949,7 @@ body {
 .compare-go-btn:hover { opacity: 0.85; }
 
 
+
 .about-inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -931,6 +986,7 @@ body {
 .about-apis li:last-child { border-bottom: none; }
 .about-apis li strong { color: var(--text); display: block; margin-bottom: 2px; }
 .about-apis a { color: var(--accent); text-decoration: none; }
+
 
 
 .modal-overlay {
@@ -1028,6 +1084,7 @@ body {
   margin-bottom: 1.25rem;
 }
 
+
 .modal-stat {
   text-align: center;
   padding: 1rem;
@@ -1098,6 +1155,7 @@ body {
   color: var(--accent);
 }
 
+
 .compare-table {
   width: 100%;
   border-collapse: collapse;
@@ -1128,6 +1186,7 @@ body {
 .cmp-green { color: var(--green); font-weight: 600; }
 
 
+
 .skeleton-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -1144,6 +1203,7 @@ body {
 }
 
 
+
 .empty-state {
   grid-column: 1 / -1;
   text-align: center;
@@ -1158,6 +1218,7 @@ body {
   color: var(--text);
   margin-bottom: 0.5rem;
 }
+
 
 
 .toast-msg {

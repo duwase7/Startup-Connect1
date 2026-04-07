@@ -9,7 +9,6 @@
 </head>
 <body>
 
-
   <nav class="navbar">
     <div class="nav-container">
       <a class="logo" href="#">
@@ -25,7 +24,6 @@
     </div>
   </nav>
 
-
   <header class="hero" id="hero">
     <div class="hero-grid-bg"></div>
     <div class="hero-inner">
@@ -36,7 +34,7 @@
         Real data, live news, and tools to compare companies side by side.
       </p>
 
- 
+    
       <div class="search-wrap">
         <div class="search-bar" id="main-search-bar">
           <input
@@ -50,7 +48,6 @@
       </div>
     </div>
 
-  
     <div class="hero-stats">
       <div class="stat-item">
         <span class="stat-number" id="stat-total">--</span>
@@ -73,6 +70,7 @@
       </div>
     </div>
   </header>
+
 
   <section class="filter-section" id="explore">
     <div class="container">
@@ -136,6 +134,10 @@
     </div>
   </section>
 
+  <div class="container" style="padding-top:1rem">
+    <div id="api-load-status"></div>
+  </div>
+
   <div class="container results-row">
     <span class="results-count" id="results-count">Loading...</span>
     <div class="view-toggle">
@@ -149,11 +151,8 @@
     <button class="tab-btn" id="tab-saved">Saved  <span class="saved-badge" id="saved-badge"></span></button>
   </div>
 
-
   <main class="container card-grid" id="card-grid">
-
   </main>
-
 
   <div class="load-more-row">
     <button class="load-more-btn" id="load-more-btn">Load More</button>
@@ -171,20 +170,21 @@
     </div>
   </section>
 
-
   <section class="section-block news-block" id="news-section">
     <div class="container">
       <div class="section-head">
         <h2>Startup News</h2>
         <p>Latest headlines from the global startup ecosystem. Powered by NewsData.io.</p>
       </div>
+    
+      <div class="api-status" id="news-api-status"></div>
+
       <div class="news-grid" id="news-grid">
         <p class="loading-text">Fetching latest news...</p>
       </div>
     </div>
   </section>
 
- 
   <div class="compare-bar" id="compare-bar">
     <div class="compare-left">
       <span class="compare-label">Compare:</span>
@@ -195,7 +195,6 @@
       <button class="compare-go-btn" id="compare-go-btn">Compare Now</button>
     </div>
   </div>
-
 
   <section class="section-block about-block" id="about">
     <div class="container about-inner">
@@ -231,16 +230,13 @@
     </div>
   </section>
 
-
   <div class="modal-overlay" id="modal-overlay">
     <div class="modal-box" id="modal-box">
       <button class="modal-close-btn" id="modal-close-btn">X</button>
       <div class="modal-content" id="modal-content">
-
       </div>
     </div>
   </div>
-
 
   <div class="toast-msg" id="toast-msg"></div>
 
@@ -250,6 +246,7 @@
     </div>
   </footer>
 
+  <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
